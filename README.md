@@ -47,7 +47,7 @@ Output of `sbt run` for all three projects.
 Interestingly:
 * The depth-first "BigInt" version produces the correct answer for `scala-native`
 * The depth-first "BigInt" version produces an incorrect answer for `scala-2.11.12` & `scala-2.13.4`
-
+```
     [chandler day7-weird]$ for d in scala-*; do (cd $d; echo $d; sbt run); done
     scala-2.11.12
     [info] welcome to sbt 1.3.13 (Oracle Corporation Java 1.8.0_265)
@@ -93,4 +93,4 @@ Interestingly:
     (BFS Long,30899)
     (BFS BigInt,30899)
     [success] Total time: 13 s, completed Dec 10, 2020 12:22:44 PM
-    
+```    
