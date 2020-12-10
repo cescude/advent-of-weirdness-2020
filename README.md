@@ -94,3 +94,12 @@ Interestingly:
     (BFS BigInt,30899)
     [success] Total time: 13 s, completed Dec 10, 2020 12:22:44 PM
 ```    
+
+The source code for all three projects is the same, the only difference is in `build.sbt` and `project/plugins.sbt`:
+
+```
+[chandler day7-weird]$ cksum scala*/Main.scala
+2273993435 3243 scala-2.11.12/Main.scala
+2273993435 3243 scala-2.13.4/Main.scala
+2273993435 3243 scala-native/Main.scala
+```
