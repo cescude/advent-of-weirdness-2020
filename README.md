@@ -1,5 +1,7 @@
 # Advent of Weirdness 2020
 
+## Background
+
 When trying to solve Day 7's problem with a depth first approach, I
 was consistently computing the wrong answer (`30449`). The computation
 worked fine for all test cases I could create, as well as the example
@@ -14,11 +16,11 @@ error.
 
 This fixed the error. However, the numbers weren't nearly so large
 that it would have been an overflow problem, so I just assumed it was
-a bug in the `scala-native` implementation.
+a weird optimization bug in the `scala-native` implementation.
 
 I decided to run the script using the JVM scala...and this time both
 the `Long` and `BigInt` versions of the DFS were wrong (version
-`2.11.12`, FWIW the same version used by scala-native).
+`2.11.12`, the same version used by scala-native).
 
 Finally, I ran the script against the "frontpage" JVM scala
 (`2.13.4`), and it had the same results.
@@ -103,3 +105,27 @@ The source code for all three projects is the same, the only difference is in `b
 2273993435 3243 scala-2.13.4/Main.scala
 2273993435 3243 scala-native/Main.scala
 ```
+
+## The actual results
+
+As expected, this is my error, not a compiler error--I figured this out by
+writing a version of the DFS that computes `BigInt` & `Long` results concurrently
+(so I could see at what point they diverge).
+
+The coding error can be fixed by converting `holds` to a `Seq` before counting
+the contained bags (two different bags may contain the same amount; all
+child bags need to be counted):
+
+```
+    val childCounts = holds/*.toSeq*/.map({
+      case Count(childBag, amount) =>
+        amount + amount * howMany(childBag, rules)
+    })
+```
+
+The difference between the `scala-native` and `scala-jvm` versions is just
+that two value-equal `BigInt`s in a `Set` are treated distinctly by
+`scala-native`, whereas `scala-jvm` treats the two value-equal `BigInt`s
+as the same.
+
+
